@@ -4,25 +4,69 @@
   <meta charset="UTF-8">
   <title>Africa City</title>
   <style>
-    body {
+    * {
       margin: 0;
-      height: 100vh;
-      background-color: #111;
-      color: white;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      scroll-behavior: smooth;
+      height: 100%;
+      overflow-x: hidden;
       font-family: Arial, sans-serif;
+    }
+
+    section {
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
     }
 
-    h1 {
-      font-size: 3em;
+    #welcome {
+      background-color: #111;
+      color: white;
+    }
+
+    #login {
+      background-color: #1a1a1a;
+      color: white;
+      flex-direction: column;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 8px;
+      background-color: #00aaff;
+      color: white;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #008fcc;
     }
   </style>
 </head>
 <body>
-  <h1>Welcome Smail</h1>
+
+  <!-- الصفحة الأولى -->
+  <section id="welcome">
+    <h1>مرحباً بكم في Africa City</h1>
+  </section>
+
+  <!-- الصفحة الثانية -->
+  <section id="login">
+    <div>
+      <h2>تسجيل الدخول</h2>
+      <button onclick="alert('https://www.facebook.com/?locale=ar_AR')">تسجيل الدخول</button>
+    </div>
+  </section>
+
 </body>
 </html>
-
