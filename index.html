@@ -4,9 +4,8 @@
   <meta charset="UTF-8">
   <title>Africa City</title>
 
-  <!-- تحميل مكتبة EmailJS بشكل تقليدي -->
-  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
-
+  <!-- تحميل مكتبة EmailJS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3.0.0/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -14,7 +13,7 @@
   <input type="email" id="user-email" placeholder="Enter your email" required>
   
   <!-- زر لإرسال الرمز -->
-  <button onclick="sendCode()">Send Code</button>
+  <button onclick="sendCode()">Send Verification Code</button>
 
   <!-- حقل إدخال الرمز (يتم إخفاؤه حتى يتم إرسال الرمز) -->
   <div id="code-container" style="display: none;">
@@ -73,5 +72,6 @@
 
 </body>
 </html>
+
 
 
