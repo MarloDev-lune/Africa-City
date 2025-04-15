@@ -30,25 +30,18 @@
       text-align: center;
     }
 
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
-    }
-
     .typewriter {
-      overflow: hidden;
-      white-space: nowrap;
-      border-right: .15em solid orange;
-      animation: typing 3s steps(40, end), blink-caret .75s step-end infinite;
-      width: 100%;
       color: white;
       font-size: 2em;
-      max-width: 600px;
+      animation: fadeIn 2s ease forwards;
+      opacity: 0;
+      max-width: 90%;
     }
 
-    @keyframes blink-caret {
-      from, to { border-color: transparent }
-      50% { border-color: orange; }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
     }
 
     #register-btn {
@@ -130,11 +123,14 @@
 
   <script>
     const usedNames = ["admin", "test", "user"];
+    const registerBtn = document.getElementById("register-btn");
 
-    // إظهار الزر بعد مدة قصيرة
-    setTimeout(() => {
-      document.getElementById("register-btn").classList.add("show");
-    }, 3000);
+    window.onload = () => {
+      // إظهار زر التسجيل بعد عرض الرسالة
+      setTimeout(() => {
+        registerBtn.classList.add("show");
+      }, 2000);
+    };
 
     function showForm() {
       document.getElementById("welcome-message").style.display = "none";
@@ -162,4 +158,5 @@
 
 </body>
 </html>
+
 
