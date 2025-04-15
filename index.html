@@ -2,174 +2,91 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Africa City</title>
-
-  <!-- إضافة سكربت EmailJS -->
-  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script type="text/javascript">
-    (function() {
-      emailjs.init("pDB0RvlQN49S0PH-L"); // استبدل "pDB0RvlQN49S0PH-L" بـ Public Key الخاص بك من EmailJS
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function () {
+      emailjs.init("pDB0RvlQN49S0PH-L"); // Public Key
     })();
   </script>
-
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: Arial, sans-serif;
       background-color: #111;
       color: white;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-family: Arial, sans-serif;
       text-align: center;
-      flex-direction: column;
+      padding-top: 100px;
     }
 
-    button {
-      background-color: #00aaff;
-      color: white;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1.2em;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-
-    button:hover {
-      background-color: #008fcc;
-    }
-
-    input {
+    input, button {
+      margin: 10px;
       padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-      width: 250px;
-      border: 1px solid #ddd;
       font-size: 1em;
     }
 
-    .form-container {
+    #verification-form {
       display: none;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 20px;
     }
 
-    .success-message {
+    #success-page {
       display: none;
-      color: lightgreen;
-      font-size: 1.2em;
-      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <h1>Welcome To Africa City</h1>
-
-  <!-- زر تسجيل الدخول -->
-  <button id="register-btn" onclick="showEmailForm()">Sign Up</button>
-
-  <!-- نموذج إدخال البريد الإلكتروني وكلمة المرور -->
-  <div id="email-form" class="form-container">
+  <div id="email-form">
+    <h2>Register</h2>
     <input type="email" id="email" placeholder="Enter your email" />
-    <input type="password" id="password" placeholder="Enter your password" />
-    <button onclick="sendVerificationCode()">Send Code</button>
+    <button onclick="sendCode()">Send Code</button>
   </div>
 
-  <!-- نموذج إدخال الرمز المرسل -->
-  <div id="verification-form" class="form-container">
-    <input type="text" id="verification-code" placeholder="Enter verification code" />
-    <button onclick="verifyCode()">Verify Code</button>
+  <div id="verification-form">
+    <h2>Enter Verification Code</h2>
+    <input type="text" id="code-input" placeholder="Enter code" />
+    <button onclick="verifyCode()">Verify</button>
   </div>
 
-  <!-- نموذج إدخال اسم المستخدم -->
-  <div id="username-form" class="form-container">
-    <input type="text" id="username" placeholder="Enter your username" />
-    <button onclick="completeRegistration()">Complete Registration</button>
+  <div id="success-page">
+    <h2>Welcome! You are now logged in.</h2>
   </div>
-
-  <!-- رسالة النجاح -->
-  <div id="success-message" class="success-message">Registration Successful! 🎉</div>
 
   <script>
-    const usedNames = ["admin", "test", "user"]; // List of used usernames
+    let generatedCode = "";
 
-    // عرض نموذج إدخال البريد الإلكتروني
-    function showEmailForm() {
-      document.getElementById("register-btn").style.display = "none";
-      document.getElementById("email-form").style.display = "flex";
-    }
+    function sendCode() {
+      const email = document.getElementById("email").value.trim();
+      if (!email) return alert("Please enter your email");
 
-    // إرسال الرمز إلى البريد الإلكتروني باستخدام EmailJS
-    function sendVerificationCode() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      // Generate 4-digit code
+      generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
 
-      if (!email || !password) {
-        alert("Please enter your email and password.");
-        return;
-      }
-
-      // توليد رمز عشوائي مكون من 4 أرقام
-      const code = Math.floor(1000 + Math.random() * 9000);
-      localStorage.setItem("verification_code", code); // تخزين الرمز مؤقتًا
-
-      // إرسال الرمز إلى البريد باستخدام EmailJS
+      // Send email via EmailJS
       emailjs.send("service_tid0byc", "template_cfx1qfk", {
         to_email: email,
-        code: code,
+        code: generatedCode,
       }).then(function(response) {
-        alert("A verification code has been sent to your email.");
+        alert("Verification code sent to your email.");
         document.getElementById("email-form").style.display = "none";
-        document.getElementById("verification-form").style.display = "flex";
+        document.getElementById("verification-form").style.display = "block";
       }, function(error) {
+        console.error("EmailJS error:", error);
         alert("Failed to send verification code.");
-        console.error(error);
       });
     }
 
-    // التحقق من الرمز المرسل
     function verifyCode() {
-      const enteredCode = document.getElementById("verification-code").value;
-      const savedCode = localStorage.getItem("verification_code");
-
-      if (enteredCode == savedCode) {
-        alert("Code verified successfully.");
+      const codeInput = document.getElementById("code-input").value.trim();
+      if (codeInput === generatedCode) {
         document.getElementById("verification-form").style.display = "none";
-        document.getElementById("username-form").style.display = "flex";
+        document.getElementById("success-page").style.display = "block";
       } else {
-        alert("Invalid code. Please try again.");
+        alert("Incorrect code. Try again.");
       }
-    }
-
-    // إتمام التسجيل بعد إدخال اسم المستخدم
-    function completeRegistration() {
-      const username = document.getElementById("username").value.trim();
-
-      if (!username) {
-        alert("Please enter a username.");
-        return;
-      }
-
-      if (usedNames.includes(username.toLowerCase())) {
-        alert("Username is already taken. Please choose another one.");
-        return;
-      }
-
-      document.getElementById("username-form").style.display = "none";
-      document.getElementById("success-message").style.display = "block";
     }
   </script>
 
 </body>
 </html>
+
 
