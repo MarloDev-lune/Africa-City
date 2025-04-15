@@ -2,7 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Scorp Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Africa City</title>
+
+  <!-- إضافة سكربت EmailJS -->
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("pDB0RvlQN49S0PH-L"); // استبدل "pDB0RvlQN49S0PH-L" بـ Public Key الخاص بك من EmailJS
+    })();
+  </script>
+
   <style>
     * {
       margin: 0;
@@ -10,246 +20,156 @@
       box-sizing: border-box;
     }
 
-    html, body {
-      scroll-behavior: smooth;
-      height: 100%;
+    body {
       font-family: Arial, sans-serif;
       background-color: #111;
       color: white;
-      overflow: hidden;
-    }
-
-    #header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 30px;
-      position: absolute;
-      top: 0;
-      width: 100%;
-    }
-
-    #logo-img {
-      width: 60px;
-      height: 60px;
-      object-fit: contain;
-    }
-
-    #intro-text {
-      font-size: 1.2em;
-      color: #ccc;
-    }
-
-    #welcome-message {
-      width: 100%;
       height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
+      flex-direction: column;
     }
 
-    .typewriter {
+    button {
+      background-color: #00aaff;
       color: white;
-      font-size: 2em;
-      animation: fadeIn 2s ease forwards;
-      opacity: 0;
-      max-width: 90%;
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
-    }
-
-    #register-btn, #login-toggle-btn {
-      background-color: transparent;
-      color: white;
-      border: 2px solid white;
-      padding: 12px 25px;
+      padding: 15px 30px;
+      border: none;
       border-radius: 8px;
-      font-size: 1em;
-      opacity: 0;
-      margin-top: 40px;
-      transition: opacity 2s ease;
+      font-size: 1.2em;
       cursor: pointer;
+      margin-top: 20px;
     }
 
-    #register-btn.show, #login-toggle-btn.show {
-      opacity: 1;
+    button:hover {
+      background-color: #008fcc;
+    }
+
+    input {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      width: 250px;
+      border: 1px solid #ddd;
+      font-size: 1em;
     }
 
     .form-container {
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
-      margin-top: 100px;
+      margin-top: 20px;
     }
 
-    input {
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-      width: 250px;
-      font-size: 1em;
-    }
-
-    button {
-      padding: 10px 20px;
-      border-radius: 5px;
-      border: none;
-      background-color: #00aaff;
-      color: white;
-      font-size: 1em;
-      cursor: pointer;
-    }
-
-    #user-page, #final-page {
+    .success-message {
       display: none;
-      height: 100vh;
-      background-color: #111;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    #username-display {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      color: #00aaff;
-      font-weight: bold;
-    }
-
-    #login-toggle-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
+      color: lightgreen;
+      font-size: 1.2em;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <div id="header">
-    <div id="intro-text">Welcome to our website!</div>
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgF0uZlFp4fTOCnWlx6G4ZDirQvJqOSrcArA&s.png" alt="Logo" id="logo-img">
+  <h1>Welcome To Africa City</h1>
+
+  <!-- زر تسجيل الدخول -->
+  <button id="register-btn" onclick="showEmailForm()">Sign Up</button>
+
+  <!-- نموذج إدخال البريد الإلكتروني وكلمة المرور -->
+  <div id="email-form" class="form-container">
+    <input type="email" id="email" placeholder="Enter your email" />
+    <input type="password" id="password" placeholder="Enter your password" />
+    <button onclick="sendVerificationCode()">Send Code</button>
   </div>
 
-  <div id="welcome-message">
-    <div id="typewriter-text" class="typewriter">Welcome To Scorp Website. Have fun with us!</div>
-    <button id="register-btn" onclick="showRegisterForm()">Register</button>
+  <!-- نموذج إدخال الرمز المرسل -->
+  <div id="verification-form" class="form-container">
+    <input type="text" id="verification-code" placeholder="Enter verification code" />
+    <button onclick="verifyCode()">Verify Code</button>
   </div>
 
-  <div id="register-form" class="form-container">
-    <input type="text" id="reg-username" placeholder="Enter your name">
-    <input type="email" id="reg-email" placeholder="Enter your email">
-    <input type="password" id="reg-password" placeholder="Enter new password">
-    <button onclick="sendVerificationCode()">Next</button>
+  <!-- نموذج إدخال اسم المستخدم -->
+  <div id="username-form" class="form-container">
+    <input type="text" id="username" placeholder="Enter your username" />
+    <button onclick="completeRegistration()">Complete Registration</button>
   </div>
 
-  <div id="code-form" class="form-container">
-    <input type="text" id="code-input" placeholder="Enter verification code">
-    <button onclick="verifyCode()">Verify</button>
-  </div>
-
-  <div id="user-page">
-    <div id="username-display"></div>
-    <h2>Welcome to your personal page</h2>
-    <button id="login-toggle-btn" onclick="showLoginForm()" class="show">Login</button>
-  </div>
-
-  <div id="login-form" class="form-container">
-    <input type="text" id="login-username" placeholder="Enter your name">
-    <input type="email" id="login-email" placeholder="Enter your email">
-    <input type="password" id="login-password" placeholder="New password">
-    <button onclick="sendLoginCode()">Next</button>
-  </div>
-
-  <div id="final-code-form" class="form-container">
-    <input type="text" id="login-code" placeholder="Enter verification code">
-    <button onclick="completeLogin()">Confirm</button>
-  </div>
-
-  <div id="final-page">
-    <h2>You have successfully logged in ✅</h2>
-  </div>
+  <!-- رسالة النجاح -->
+  <div id="success-message" class="success-message">Registration Successful! 🎉</div>
 
   <script>
-    const usedNames = ["admin", "test", "user"];
-    const verificationCode = Math.floor(1000 + Math.random() * 9000).toString();
+    const usedNames = ["admin", "test", "user"]; // List of used usernames
 
-    window.onload = () => {
-      setTimeout(() => {
-        document.getElementById("register-btn").classList.add("show");
-      }, 2000);
-
-      // Auto-login if already registered
-      const savedUser = localStorage.getItem("user");
-      if (savedUser) {
-        const username = JSON.parse(savedUser).username;
-        showUserPage(username);
-      }
-    };
-
-    function showRegisterForm() {
-      document.getElementById("welcome-message").style.display = "none";
-      document.getElementById("register-form").style.display = "flex";
+    // عرض نموذج إدخال البريد الإلكتروني
+    function showEmailForm() {
+      document.getElementById("register-btn").style.display = "none";
+      document.getElementById("email-form").style.display = "flex";
     }
 
+    // إرسال الرمز إلى البريد الإلكتروني باستخدام EmailJS
     function sendVerificationCode() {
-      const username = document.getElementById("reg-username").value.trim();
-      if (!username || usedNames.includes(username.toLowerCase())) {
-        alert("Please enter a valid and unique username.");
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) {
+        alert("Please enter your email and password.");
         return;
       }
-      alert("Verification code sent to your email: " + verificationCode);
-      document.getElementById("register-form").style.display = "none";
-      document.getElementById("code-form").style.display = "flex";
+
+      // توليد رمز عشوائي مكون من 4 أرقام
+      const code = Math.floor(1000 + Math.random() * 9000);
+      localStorage.setItem("verification_code", code); // تخزين الرمز مؤقتًا
+
+      // إرسال الرمز إلى البريد باستخدام EmailJS
+      emailjs.send("service_tid0byc", "template_cfx1qfk", {
+        to_email: email,
+        code: code,
+      }).then(function(response) {
+        alert("A verification code has been sent to your email.");
+        document.getElementById("email-form").style.display = "none";
+        document.getElementById("verification-form").style.display = "flex";
+      }, function(error) {
+        alert("Failed to send verification code.");
+        console.error(error);
+      });
     }
 
+    // التحقق من الرمز المرسل
     function verifyCode() {
-      const code = document.getElementById("code-input").value.trim();
-      if (code === verificationCode) {
-        const username = document.getElementById("reg-username").value.trim();
-        localStorage.setItem("user", JSON.stringify({ username }));
-        showUserPage(username);
+      const enteredCode = document.getElementById("verification-code").value;
+      const savedCode = localStorage.getItem("verification_code");
+
+      if (enteredCode == savedCode) {
+        alert("Code verified successfully.");
+        document.getElementById("verification-form").style.display = "none";
+        document.getElementById("username-form").style.display = "flex";
       } else {
-        alert("Invalid code");
+        alert("Invalid code. Please try again.");
       }
     }
 
-    function showUserPage(username) {
-      document.getElementById("register-form").style.display = "none";
-      document.getElementById("code-form").style.display = "none";
-      document.getElementById("welcome-message").style.display = "none";
-      document.getElementById("user-page").style.display = "block";
-      document.getElementById("username-display").textContent = username;
-    }
+    // إتمام التسجيل بعد إدخال اسم المستخدم
+    function completeRegistration() {
+      const username = document.getElementById("username").value.trim();
 
-    function showLoginForm() {
-      document.getElementById("login-form").style.display = "flex";
-    }
-
-    function sendLoginCode() {
-      alert("Login code sent to your email: " + verificationCode);
-      document.getElementById("login-form").style.display = "none";
-      document.getElementById("final-code-form").style.display = "flex";
-    }
-
-    function completeLogin() {
-      const code = document.getElementById("login-code").value.trim();
-      if (code === verificationCode) {
-        document.getElementById("final-code-form").style.display = "none";
-        document.getElementById("user-page").style.display = "none";
-        document.getElementById("final-page").style.display = "block";
-      } else {
-        alert("Incorrect code.");
+      if (!username) {
+        alert("Please enter a username.");
+        return;
       }
+
+      if (usedNames.includes(username.toLowerCase())) {
+        alert("Username is already taken. Please choose another one.");
+        return;
+      }
+
+      document.getElementById("username-form").style.display = "none";
+      document.getElementById("success-message").style.display = "block";
     }
   </script>
 
 </body>
 </html>
+
