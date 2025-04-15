@@ -2,91 +2,72 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Africa City</title>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script>
-    (function () {
-      emailjs.init("pDB0RvlQN49S0PH-L"); // Public Key
-    })();
-  </script>
+  <title>Verification Code Sender</title>
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <style>
     body {
       background-color: #111;
       color: white;
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
-
     input, button {
-      margin: 10px;
       padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+      border: none;
       font-size: 1em;
     }
-
-    #verification-form {
-      display: none;
+    input {
+      width: 250px;
     }
-
-    #success-page {
-      display: none;
+    button {
+      background-color: #00aaff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #008fcc;
     }
   </style>
 </head>
 <body>
 
-  <div id="email-form">
-    <h2>Register</h2>
-    <input type="email" id="email" placeholder="Enter your email" />
-    <button onclick="sendCode()">Send Code</button>
-  </div>
-
-  <div id="verification-form">
-    <h2>Enter Verification Code</h2>
-    <input type="text" id="code-input" placeholder="Enter code" />
-    <button onclick="verifyCode()">Verify</button>
-  </div>
-
-  <div id="success-page">
-    <h2>Welcome! You are now logged in.</h2>
-  </div>
+  <h2>Send Verification Code</h2>
+  <input type="email" id="user-email" placeholder="Enter your email">
+  <button onclick="sendCode()">Send Code</button>
 
   <script>
-    let generatedCode = "";
+    // Initialize EmailJS with your public key
+    (function() {
+      emailjs.init("pDB0RvlQN49S0PH-L");
+    })();
 
     function sendCode() {
-      const email = document.getElementById("email").value.trim();
-      if (!email) return alert("Please enter your email");
+      const email = document.getElementById("user-email").value;
+      if (!email) {
+        alert("Please enter your email.");
+        return;
+      }
 
-      // Generate 4-digit code
-      generatedCode = Math.floor(1000 + Math.random() * 9000).toString();
+      const code = Math.floor(1000 + Math.random() * 9000); // Random 4-digit code
 
-      // Send email via EmailJS
       emailjs.send("service_tid0byc", "template_cfx1qfk", {
         to_email: email,
-        code: generatedCode,
+        code: code
       }).then(function(response) {
-        alert("Verification code sent to your email.");
-        document.getElementById("email-form").style.display = "none";
-        document.getElementById("verification-form").style.display = "block";
+        alert("✅ Code sent to your email: " + email + "\nCode: " + code);
+        console.log("SUCCESS!", response.status, response.text);
       }, function(error) {
-        console.error("EmailJS error:", error);
-        alert("Failed to send verification code.");
+        alert("❌ Failed to send code. Check your EmailJS setup.");
+        console.log("FAILED...", error);
       });
-    }
-
-    function verifyCode() {
-      const codeInput = document.getElementById("code-input").value.trim();
-      if (codeInput === generatedCode) {
-        document.getElementById("verification-form").style.display = "none";
-        document.getElementById("success-page").style.display = "block";
-      } else {
-        alert("Incorrect code. Try again.");
-      }
     }
   </script>
 
 </body>
 </html>
-
-
