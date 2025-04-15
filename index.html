@@ -1,103 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Africa City</title>
-  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script type="text/javascript">
-    (function () {
-      emailjs.init("pDB0RvlQN49S0PH-L"); // هذا هو الـ Public Key
-    })();
-  </script>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #111;
-      color: white;
-      text-align: center;
-      padding: 50px;
-    }
-    input, button {
-      padding: 10px;
-      margin: 10px;
-      border-radius: 5px;
-      border: none;
-      font-size: 1em;
-    }
-    button {
-      background-color: #00aaff;
-      color: white;
-      cursor: pointer;
-    }
-    #code-section {
-      display: none;
-    }
-    #success-message {
-      display: none;
-      color: lightgreen;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-  </style>
 </head>
 <body>
 
-  <h1>Register to Africa City</h1>
+  <!-- حقل إدخال الإيميل -->
+  <input type="email" id="user-email" placeholder="Enter your email" required>
+  
+  <!-- زر لإرسال الرمز -->
+  <button onclick="sendCode()">Send Verification Code</button>
 
-  <div id="form-section">
-    <input type="email" id="user_email" placeholder="Enter your email" />
-    <button onclick="sendVerificationCode()">Send Code</button>
+  <!-- حقل إدخال الرمز (يتم إخفاؤه حتى يتم إرسال الرمز) -->
+  <div id="code-container" style="display: none;">
+    <input type="text" id="verification-code" placeholder="Enter the code" required>
+    <button onclick="verifyCode()">Verify Code</button>
   </div>
 
-  <div id="code-section">
-    <input type="text" id="code_input" placeholder="Enter the code" />
-    <button onclick="verifyCode()">Verify</button>
-  </div>
+  <script type="module">
+    // استيراد مكتبة EmailJS الحديثة
+    import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
 
-  <div id="success-message">✅ Successfully Verified!</div>
+    // Initialize EmailJS مع Public Key الخاص بك
+    emailjs.init("pDB0RvlQN49S0PH-L");
 
-  <script>
-    let generatedCode = "";
+    // دالة لإرسال الرمز إلى الإيميل
+    function sendCode() {
+      const email = document.getElementById("user-email").value.trim();  // الحصول على الإيميل من الحقل
 
-    function generateCode() {
-      return Math.floor(1000 + Math.random() * 9000).toString(); // 4-digit code
-    }
-
-    function sendVerificationCode() {
-      const email = document.getElementById("user_email").value;
       if (!email) {
-        alert("Please enter your email.");
+        alert("يرجى إدخال بريدك الإلكتروني.");
         return;
       }
 
-      generatedCode = generateCode();
+      const code = Math.floor(1000 + Math.random() * 9000); // توليد كود عشوائي مكون من 4 أرقام
 
+      // إرسال الرمز عبر EmailJS
       emailjs.send("service_tid0byc", "template_cfx1qfk", {
-        code: generatedCode,
-        to_email: email,
-        email: email,
-      })
-      .then(() => {
-        alert("Verification code sent to your email.");
-        document.getElementById("form-section").style.display = "none";
-        document.getElementById("code-section").style.display = "block";
-      })
-      .catch((error) => {
-        console.error("FAILED...", error);
-        alert("Failed to send code. Please try again.");
+        to_email: email,   // الإيميل الذي سيتم إرسال الرمز إليه
+        code: code,        // الرمز العشوائي المولد
+        email: email       // الإيميل الخاص بالمستخدم
+      }).then(function(response) {
+        alert("✅ تم إرسال الرمز إلى بريدك الإلكتروني!");
+        console.log("SUCCESS", response.status, response.text);
+
+        // إظهار حقل إدخال الرمز بعد إرسال الرمز
+        document.getElementById("code-container").style.display = "block";
+      }, function(error) {
+        alert("❌ فشل في إرسال الرمز. حاول مرة أخرى.");
+        console.error("FAILED", error);
       });
     }
 
+    // دالة للتحقق من الرمز
     function verifyCode() {
-      const userCode = document.getElementById("code_input").value;
-      if (userCode === generatedCode) {
-        document.getElementById("code-section").style.display = "none";
-        document.getElementById("success-message").style.display = "block";
+      const enteredCode = document.getElementById("verification-code").value.trim();  // الحصول على الرمز المدخل
+      const correctCode = document.querySelector("#code-container").dataset.code;  // الرمز المرسل
+
+      if (enteredCode === correctCode) {
+        alert("✅ تم التحقق من الرمز بنجاح!");
+        window.location.href = "your-next-page.html";  // الانتقال إلى الصفحة التالية
       } else {
-        alert("Incorrect code. Try again.");
+        alert("❌ الرمز غير صحيح. حاول مرة أخرى.");
       }
     }
   </script>
 
 </body>
 </html>
+
