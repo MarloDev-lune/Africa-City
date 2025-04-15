@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Africa City</title>
+
+  <!-- تحميل مكتبة EmailJS بشكل تقليدي -->
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
 </head>
 <body>
 
@@ -18,11 +22,8 @@
     <button onclick="verifyCode()">Verify Code</button>
   </div>
 
-  <script type="module">
-    // استيراد مكتبة EmailJS الحديثة
-    import emailjs from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
-
-    // Initialize EmailJS مع Public Key الخاص بك
+  <script>
+    // تهيئة EmailJS مع Public Key الخاص بك
     emailjs.init("pDB0RvlQN49S0PH-L");
 
     // دالة لإرسال الرمز إلى الإيميل
@@ -30,7 +31,7 @@
       const email = document.getElementById("user-email").value.trim();  // الحصول على الإيميل من الحقل
 
       if (!email) {
-        alert("يرجى إدخال بريدك الإلكتروني.");
+        alert("Please enter your email.");
         return;
       }
 
@@ -42,13 +43,16 @@
         code: code,        // الرمز العشوائي المولد
         email: email       // الإيميل الخاص بالمستخدم
       }).then(function(response) {
-        alert("✅ تم إرسال الرمز إلى بريدك الإلكتروني!");
+        alert("✅ The verification code has been sent to your email!");
         console.log("SUCCESS", response.status, response.text);
+
+        // تخزين الرمز في حقل البيانات
+        document.getElementById("code-container").dataset.code = code; 
 
         // إظهار حقل إدخال الرمز بعد إرسال الرمز
         document.getElementById("code-container").style.display = "block";
       }, function(error) {
-        alert("❌ فشل في إرسال الرمز. حاول مرة أخرى.");
+        alert("❌ Failed to send the code. Please try again.");
         console.error("FAILED", error);
       });
     }
@@ -56,17 +60,18 @@
     // دالة للتحقق من الرمز
     function verifyCode() {
       const enteredCode = document.getElementById("verification-code").value.trim();  // الحصول على الرمز المدخل
-      const correctCode = document.querySelector("#code-container").dataset.code;  // الرمز المرسل
+      const correctCode = document.getElementById("code-container").dataset.code;  // الرمز المرسل
 
       if (enteredCode === correctCode) {
-        alert("✅ تم التحقق من الرمز بنجاح!");
+        alert("✅ The code has been successfully verified!");
         window.location.href = "your-next-page.html";  // الانتقال إلى الصفحة التالية
       } else {
-        alert("❌ الرمز غير صحيح. حاول مرة أخرى.");
+        alert("❌ The code is incorrect. Please try again.");
       }
     }
   </script>
 
 </body>
 </html>
+
 
