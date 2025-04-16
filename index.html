@@ -42,6 +42,9 @@
             text-align: center;
             max-width: 90%;
             margin-top: 50px;
+            white-space: nowrap;  /* لضمان أن الكتابة تكون في سطر واحد */
+            overflow: hidden;
+            width: 100%;
             animation: typing 2s steps(40) infinite;
         }
 
@@ -159,7 +162,15 @@
     // التحقق من الإنسان
     setTimeout(() => {
         document.getElementById('verify-screen').style.display = 'none';
-        document.getElementById('main-page').style.display = 'block';
+        // إذا كان اسم المستخدم محفوظًا في localStorage، يذهب مباشرة إلى الصفحة الثانية
+        if(localStorage.getItem("userName")) {
+            userName = localStorage.getItem("userName");
+            document.getElementById('main-page').style.display = 'none';
+            document.getElementById('second-page').style.display = 'block';
+            document.getElementById('name-display').innerText = 'Hello, ' + userName;
+        } else {
+            document.getElementById('main-page').style.display = 'block';
+        }
     }, 3000); // يختفي بعد 3 ثوانٍ ويذهب إلى الصفحة الرئيسية
 
     // إظهار شاشة إدخال الاسم
@@ -168,10 +179,11 @@
         document.getElementById('name-entry').style.display = 'block';
     }
 
-    // تخزين اسم المستخدم
+    // تخزين اسم المستخدم في localStorage
     function enterName() {
         userName = document.getElementById('name-input').value.trim();
         if (userName) {
+            localStorage.setItem("userName", userName); // حفظ الاسم في localStorage
             document.getElementById('name-entry').style.display = 'none';
             document.getElementById('second-page').style.display = 'block';
             document.getElementById('name-display').innerText = 'Hello, ' + userName;
@@ -190,6 +202,7 @@
 
 </body>
 </html>
+
 
 
 
