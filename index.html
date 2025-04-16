@@ -1,205 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Africa City</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: black;
-            color: white;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Africa City</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+      overflow: hidden;
+    }
 
-        #verify-screen, #main-page, #name-entry, #second-page {
-            display: none;
-            height: 100vh;
-            padding: 20px;
-        }
+    #verify-screen, #main-page, #name-entry, #second-page {
+      display: none;
+      height: 100vh;
+      padding: 20px;
+    }
 
-        #verify-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: black;
-            flex-direction: column;
-        }
+    #verify-screen {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: black;
+      flex-direction: column;
+    }
 
-        #verify-message {
-            font-size: 24px;
-            color: white;
-        }
+    #verify-message {
+      font-size: 24px;
+      color: white;
+    }
 
-        #welcome-message {
-            font-size: 2em;
-            text-align: center;
-            margin-top: 50px;
-            white-space: nowrap;
-            overflow: hidden;
-            width: 100%;
-            animation: typing 2s steps(40) infinite;
-        }
+    #welcome-message {
+      font-size: 2em;
+      text-align: center;
+      margin-top: 50px;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      animation: typing 2s steps(40) infinite;
+    }
 
-        @keyframes typing {
-            0% { width: 0; }
-            100% { width: 100%; }
-        }
+    @keyframes typing {
+      0% { width: 0; }
+      100% { width: 100%; }
+    }
 
-        #enter-web-btn {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            padding: 10px 20px;
-            background-color: orange;
-            border: none;
-            color: white;
-            font-size: 1.2em;
-            cursor: pointer;
-        }
+    #enter-web-btn {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      padding: 10px 20px;
+      background-color: orange;
+      border: none;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+    }
 
-        #footer-message {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 1.2em;
-        }
+    #footer-message {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2em;
+    }
 
-        #site-title {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 1.5em;
-            color: orange;
-        }
+    #site-title {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 1.5em;
+      color: orange;
+    }
 
-        input {
-            padding: 10px;
-            font-size: 1.2em;
-            width: 200px;
-            margin-bottom: 10px;
-        }
+    input {
+      padding: 10px;
+      font-size: 1.2em;
+      width: 200px;
+      margin-bottom: 10px;
+    }
 
-        #name-display {
-            position: absolute;
-            left: 20px;
-            top: 20px;
-            font-size: 1.5em;
-        }
+    #name-display {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      font-size: 1.5em;
+    }
 
-        #dot-container {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            font-size: 1.5em;
-            cursor: pointer;
-        }
+    #dot-container {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 1.5em;
+      cursor: pointer;
+    }
 
-        #africa-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2.5em;
-            color: orange;
-        }
+    #africa-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5em;
+      color: orange;
+    }
 
-        #logout-btn {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            color: red;
-            cursor: pointer;
-            font-size: 1.1em;
-        }
-    </style>
+    #logout-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      color: red;
+      cursor: pointer;
+      font-size: 1.1em;
+    }
+  </style>
 </head>
 <body>
 
 <!-- شاشة التحقق -->
 <div id="verify-screen">
-    <div id="verify-message">Verifying you are human...</div>
+  <div id="verify-message">Verifying you are human...</div>
 </div>
 
 <!-- الصفحة الرئيسية -->
 <div id="main-page">
-    <div id="site-title">Africa City</div>
-    <div id="welcome-message">Welcome To Africa City WebSite</div>
-    <button id="enter-web-btn" onclick="showNameEntry()">Enter Web</button>
-    <div id="footer-message">Hey This Web Has Developed By MarloDev I Hope You Have Fun Here</div>
+  <div id="site-title">Africa City</div>
+  <div id="welcome-message">Welcome To Africa City WebSite</div>
+  <button id="enter-web-btn" onclick="showNameEntry()">Enter Web</button>
+  <div id="footer-message">Hey This Web Has Developed By MarloDev I Hope You Have Fun Here</div>
 </div>
 
 <!-- إدخال الاسم -->
 <div id="name-entry">
-    <input type="text" id="name-input" placeholder="Enter your name">
-    <button onclick="enterName()">Next</button>
+  <input type="text" id="name-input" placeholder="Enter your name" />
+  <button onclick="enterName()">Next</button>
 </div>
 
 <!-- الصفحة الثانية -->
 <div id="second-page">
-    <div id="name-display"></div>
-    <div id="dot-container" onclick="showVisitors()">...</div>
-    <div id="africa-text">Africa</div>
-    <div id="logout-btn" onclick="logout()">Logout</div>
+  <div id="name-display"></div>
+  <div id="dot-container" onclick="showVisitors()">...</div>
+  <div id="africa-text">Africa</div>
+  <div id="logout-btn" onclick="logout()">Logout</div>
 </div>
 
 <script>
-    let userName = '';
-    let visitorsCount = 0;
+  let userName = '';
+  let visitorsCount = 0;
 
-    document.addEventListener("DOMContentLoaded", () => {
-        // بعد 3 ثواني من "التحقق من الإنسان"
-        setTimeout(() => {
-            document.getElementById('verify-screen').style.display = 'none';
+  document.addEventListener("DOMContentLoaded", () => {
+    // تأخير التحقق
+    setTimeout(() => {
+      document.getElementById('verify-screen').style.display = 'none';
 
-            if (localStorage.getItem("userName")) {
-                userName = localStorage.getItem("userName");
-                showSecondPage();
-            } else {
-                document.getElementById('main-page').style.display = 'block';
-            }
-        }, 3000);
-    });
-
-    function showNameEntry() {
-        document.getElementById('main-page').style.display = 'none';
-        document.getElementById('name-entry').style.display = 'block';
-    }
-
-    function enterName() {
-        const nameInput = document.getElementById('name-input').value.trim();
-        if (nameInput) {
-            userName = nameInput;
-            localStorage.setItem("userName", userName);
-            showSecondPage();
-        } else {
-            alert("Please enter a valid name!");
-        }
-    }
-
-    function showSecondPage() {
-        document.getElementById('name-entry').style.display = 'none';
-        document.getElementById('main-page').style.display = 'none';
-        document.getElementById('second-page').style.display = 'block';
-        document.getElementById('name-display').innerText = "Hello, " + userName;
-    }
-
-    function logout() {
-        localStorage.removeItem("userName");
-        document.getElementById('second-page').style.display = 'none';
+      if (localStorage.getItem("userName")) {
+        userName = localStorage.getItem("userName");
+        showSecondPage();
+      } else {
         document.getElementById('main-page').style.display = 'block';
-    }
+      }
 
-    function showVisitors() {
-        alert('Number of visitors: ' + visitorsCount);
+      // جلب العداد من التخزين
+      if (localStorage.getItem("visitorsCount")) {
+        visitorsCount = parseInt(localStorage.getItem("visitorsCount"));
+      }
+    }, 3000);
+  });
+
+  function showNameEntry() {
+    document.getElementById('main-page').style.display = 'none';
+    document.getElementById('name-entry').style.display = 'block';
+  }
+
+  function enterName() {
+    const nameInput = document.getElementById('name-input').value.trim();
+    if (nameInput) {
+      userName = nameInput;
+      localStorage.setItem("userName", userName);
+
+      // تحديث عدد الزوار فقط إذا أول مرة
+      if (!localStorage.getItem("counted")) {
         visitorsCount++;
+        localStorage.setItem("visitorsCount", visitorsCount);
+        localStorage.setItem("counted", "true");
+      }
+
+      showSecondPage();
+    } else {
+      alert("Please enter a valid name!");
     }
+  }
+
+  function showSecondPage() {
+    document.getElementById('name-entry').style.display = 'none';
+    document.getElementById('main-page').style.display = 'none';
+    document.getElementById('second-page').style.display = 'block';
+    document.getElementById('name-display').innerText = "Hello, " + userName;
+  }
+
+  function logout() {
+    localStorage.removeItem("userName");
+    localStorage.removeItem("counted");
+    document.getElementById('second-page').style.display = 'none';
+    document.getElementById('main-page').style.display = 'block';
+  }
+
+  function showVisitors() {
+    alert("Number of visitors: " + visitorsCount);
+  }
 </script>
 
 </body>
 </html>
+
 
 
 
