@@ -1,83 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Africa City</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Africa City</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            overflow: hidden;
+        }
 
-  <!-- تحميل مكتبة EmailJS -->
-  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+        /* شاشة التحقق من الإنسان */
+        #verify-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            flex-direction: column;
+        }
 
-  <script type="text/javascript">
-    (function() {
-      emailjs.init("pDB0RvlQN49S0PH-L");  // استبدل "pDB0RvlQN49S0PH-L" بـ Public Key الخاص بك
-    })();
-  </script>
+        #verify-message {
+            font-size: 24px;
+            color: white;
+        }
 
+        /* الصفحة الرئيسية */
+        #main-page {
+            display: none;
+            height: 100vh;
+            padding: 20px;
+        }
+
+        /* رسالة الترحيب */
+        #welcome-message {
+            font-size: 2em;
+            color: white;
+            text-align: center;
+            max-width: 90%;
+            margin-top: 50px;
+            animation: typing 2s steps(40) infinite;
+        }
+
+        @keyframes typing {
+            0% {
+                width: 0;
+            }
+            100% {
+                width: 100%;
+            }
+        }
+
+        /* زر الدخول */
+        #enter-web-btn {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            padding: 10px 20px;
+            background-color: orange;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        /* الشريط السفلي */
+        #footer-message {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        /* صفحة إدخال الاسم */
+        #name-entry {
+            display: none;
+            padding: 20px;
+        }
+
+        input {
+            padding: 10px;
+            font-size: 1.2em;
+            margin: 10px 0;
+            width: 200px;
+        }
+
+        /* الصفحة الثانية بعد إدخال الاسم */
+        #second-page {
+            display: none;
+            background-color: black;
+            height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        #name-display {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            font-size: 1.5em;
+        }
+
+        #dot-container {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        #africa-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2.5em;
+            color: orange;
+        }
+
+    </style>
 </head>
 <body>
 
-  <!-- حقل إدخال الإيميل -->
-  <input type="email" id="user-email" placeholder="Enter your email" required>
-  
-  <!-- زر لإرسال الرمز -->
-  <button onclick="sendCode()">Send Code</button>
+<!-- شاشة التحقق من الإنسان -->
+<div id="verify-screen">
+    <div id="verify-message">Verifying you are human...</div>
+</div>
 
-  <!-- حقل إدخال الرمز (يتم إخفاؤه حتى يتم إرسال الرمز) -->
-  <div id="code-container" style="display: none;">
-    <input type="text" id="verification-code" placeholder="Enter the code" required>
-    <button onclick="verifyCode()">Verify Code</button>
-  </div>
+<!-- الصفحة الرئيسية -->
+<div id="main-page">
+    <div id="welcome-message">Welcome To Africa City WebSite</div>
+    <button id="enter-web-btn" onclick="showNameEntry()">Enter Web</button>
+    <div id="footer-message">Hey This Web Has Developed By MarloDev I Hope You Have Fun Here</div>
+</div>
 
-  <script>
-    // دالة لإرسال الرمز إلى الإيميل
-    function sendCode() {
-      const email = document.getElementById("user-email").value.trim();  // الحصول على الإيميل من الحقل
+<!-- صفحة إدخال الاسم -->
+<div id="name-entry">
+    <input type="text" id="name-input" placeholder="Enter your name">
+    <button onclick="enterName()">Next</button>
+</div>
 
-      if (!email) {
-        alert("Please enter your email.");
-        return;
-      }
+<!-- الصفحة الثانية بعد إدخال الاسم -->
+<div id="second-page">
+    <div id="name-display"></div>
+    <div id="dot-container" onclick="showVisitors()">...</div>
+    <div id="africa-text">Africa</div>
+</div>
 
-      const code = Math.floor(1000 + Math.random() * 9000); // توليد كود عشوائي مكون من 4 أرقام
+<script>
+    let userName = '';
+    let visitorsCount = 0;
 
-      // إرسال الرمز عبر EmailJS
-      emailjs.send("service_tid0byc", "template_cfx1qfk", {
-        to_email: email,   // الإيميل الذي سيتم إرسال الرمز إليه
-        code: code,        // الرمز العشوائي المولد
-        email: email       // الإيميل الخاص بالمستخدم
-      }).then(function(response) {
-        alert("✅ The verification code has been sent to your email!");
-        console.log("SUCCESS", response.status, response.text);
+    // التحقق من الإنسان
+    setTimeout(() => {
+        document.getElementById('verify-screen').style.display = 'none';
+        document.getElementById('main-page').style.display = 'block';
+    }, 3000); // يختفي بعد 3 ثوانٍ ويذهب إلى الصفحة الرئيسية
 
-        // تخزين الرمز في حقل البيانات
-        document.getElementById("code-container").dataset.code = code; 
-
-        // إظهار حقل إدخال الرمز بعد إرسال الرمز
-        document.getElementById("code-container").style.display = "block";
-      }, function(error) {
-        alert("❌ Failed to send the code. Please try again.");
-        console.error("FAILED", error);
-      });
+    // إظهار شاشة إدخال الاسم
+    function showNameEntry() {
+        document.getElementById('main-page').style.display = 'none';
+        document.getElementById('name-entry').style.display = 'block';
     }
 
-    // دالة للتحقق من الرمز
-    function verifyCode() {
-      const enteredCode = document.getElementById("verification-code").value.trim();  // الحصول على الرمز المدخل
-      const correctCode = document.getElementById("code-container").dataset.code;  // الرمز المرسل
-
-      if (enteredCode === correctCode) {
-        alert("✅ The code has been successfully verified!");
-        window.location.href = "your-next-page.html";  // الانتقال إلى الصفحة التالية
-      } else {
-        alert("❌ The code is incorrect. Please try again.");
-      }
+    // تخزين اسم المستخدم
+    function enterName() {
+        userName = document.getElementById('name-input').value.trim();
+        if (userName) {
+            document.getElementById('name-entry').style.display = 'none';
+            document.getElementById('second-page').style.display = 'block';
+            document.getElementById('name-display').innerText = 'Hello, ' + userName;
+        } else {
+            alert('Please enter a valid name!');
+        }
     }
-  </script>
+
+    // عرض عدد الزوار
+    function showVisitors() {
+        alert('Number of visitors: ' + visitorsCount);
+        visitorsCount++; // زيادة العدد بعد الضغط
+    }
+
+</script>
 
 </body>
 </html>
-
-
 
 
 
