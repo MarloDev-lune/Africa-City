@@ -1,25 +1,40 @@
 <?php
 session_start();
 
-$max_requests = 100; // عدد الطلبات المسموح بها
-$time_window = 60; // خلال كم ثانية
+$limit = 30; // عدد الطلبات المسموح بها
+$timeWindow = 60; // خلال كم ثانية (هنا: 60 ثانية)
+$ip = $_SERVER['REMOTE_ADDR'];
+$time = time();
 
-if (!isset($_SESSION['requests'])) {
-    $_SESSION['requests'] = [];
+// ملف التخزين المؤقت
+$log_file = __DIR__ . '/ddos_log.json';
+
+// تحميل السجل القديم
+$log = file_exists($log_file) ? json_decode(file_get_contents($log_file), true) : [];
+
+// تنظيف السجل من الطلبات القديمة
+foreach ($log as $ipAddr => $timestamps) {
+    $log[$ipAddr] = array_filter($timestamps, function($t) use ($time, $timeWindow) {
+        return ($time - $t) <= $timeWindow;
+    });
+    if (empty($log[$ipAddr])) {
+        unset($log[$ipAddr]);
+    }
 }
 
-// حذف الطلبات القديمة
-$_SESSION['requests'] = array_filter($_SESSION['requests'], function ($timestamp) use ($time_window) {
-    return (time() - $timestamp) < $time_window;
-});
+// تحقق من عدد طلبات الـ IP الحالي
+if (!isset($log[$ip])) $log[$ip] = [];
+$log[$ip][] = $time;
 
-if (count($_SESSION['requests']) >= $max_requests) {
+if (count($log[$ip]) > $limit) {
     http_response_code(429); // Too Many Requests
-    die("Blocked due to too many requests.");
+    echo json_encode(["error" => "Too many requests."]);
+    exit;
 }
 
-// حفظ الوقت الحالي
-$_SESSION['requests'][] = time();
+// حفظ السجل
+file_put_contents($log_file, json_encode($log));
 
-echo "OK";
+http_response_code(200);
+echo json_encode(["status" => "ok"]);
 ?>
