@@ -1,0 +1,17 @@
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("ddos_protection.php")
+        .then(response => {
+            if (!response.ok) {
+                alert("🚫 You Have Been Banned By Vantoline");
+                window.location.href = "https://www.google.com"; // أو أي صفحة تحذيرية
+            } else {
+                // إذا كل شيء تمام، حوله للموقع الرئيسي
+                window.location.href = "index.html";
+            }
+        })
+        .catch(error => {
+            console.error("Vantoline:Error", error);
+        });
+});
+</script>
