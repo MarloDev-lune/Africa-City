@@ -5,7 +5,14 @@
   <title>Africa City</title>
 
   <!-- تحميل مكتبة EmailJS -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3.0.0/dist/email.min.js"></script>
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+  <script type="text/javascript">
+    (function() {
+      emailjs.init("pDB0RvlQN49S0PH-L");  // استبدل "pDB0RvlQN49S0PH-L" بـ Public Key الخاص بك
+    })();
+  </script>
+
 </head>
 <body>
 
@@ -22,9 +29,6 @@
   </div>
 
   <script>
-    // تهيئة EmailJS مع Public Key الخاص بك
-    emailjs.init("pDB0RvlQN49S0PH-L");
-
     // دالة لإرسال الرمز إلى الإيميل
     function sendCode() {
       const email = document.getElementById("user-email").value.trim();  // الحصول على الإيميل من الحقل
@@ -72,6 +76,7 @@
 
 </body>
 </html>
+
 
 
 
